@@ -25,11 +25,12 @@ function ThemeSettings() {
   const { t } = useTranslation();
   const raw = team.getPreference(TeamPreference.Theme);
   const selected = typeof raw === "string" ? raw : undefined;
+  const advanced = team.getPreference(TeamPreference.ThemeMode) === "advanced";
 
-  const save = async (id: string | null) => {
+  const save = async (id: string) => {
     try {
       await team.save({
-        preferences: { ...team.preferences, theme: id ?? undefined },
+        preferences: { ...team.preferences, theme: id },
       });
       toast.success(t("Settings saved"));
     } catch (_err) {
@@ -46,21 +47,21 @@ function ThemeSettings() {
         )}
       </Text>
 
-      <DefaultButton
-        type="button"
-        onClick={() => save(null)}
-        $active={!selected}
-      >
-        {t("Default")} {selected ? "" : "✓"}
-      </DefaultButton>
+      {!advanced && (
+        <Prompt>
+          {t(
+            "Switch Theme to Advanced in Settings → Details to choose a theme."
+          )}
+        </Prompt>
+      )}
 
-      <Grid>
+      <Grid $disabled={!advanced} aria-disabled={!advanced}>
         {themeList.map((theme) => (
           <ThemePreview
             key={theme.id}
             theme={theme}
-            selected={selected === theme.id}
-            onSelect={() => save(theme.id)}
+            selected={advanced && selected === theme.id}
+            onSelect={() => advanced && save(theme.id)}
           />
         ))}
       </Grid>
@@ -70,23 +71,21 @@ function ThemeSettings() {
 
 export default observer(ThemeSettings);
 
-const DefaultButton = styled.button<{ $active: boolean }>`
-  align-self: flex-start;
+const Prompt = styled.p`
   margin: 4px 0 16px;
+  padding: 10px 14px;
+  border: 1px dashed ${(props) => props.theme.divider};
+  border-radius: 8px;
   font-size: 14px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  color: ${(props) =>
-    props.$active ? props.theme.accentText : props.theme.text};
-  background: ${(props) =>
-    props.$active ? props.theme.accent : props.theme.backgroundSecondary};
-  border: 1px solid ${(props) => props.theme.inputBorder};
+  color: ${(props) => props.theme.textSecondary};
 `;
 
-const Grid = styled.div`
+const Grid = styled.div<{ $disabled: boolean }>`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 12px;
+  opacity: ${(props) => (props.$disabled ? 0.45 : 1)};
+  pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
+  filter: ${(props) => (props.$disabled ? "grayscale(0.6)" : "none")};
+  transition: opacity 120ms ease;
 `;

@@ -436,6 +436,8 @@ export enum TeamPreference {
   DisabledEmbeds = "disabledEmbeds",
   /** The id of the team's selected full-surface theme preset (fork feature). */
   Theme = "theme",
+  /** Theme mode: "default" (stock accent) or "advanced" (Prism theme). */
+  ThemeMode = "themeMode",
 }
 
 export type TeamPreferences = {
@@ -454,6 +456,7 @@ export type TeamPreferences = {
   [TeamPreference.MCP]?: boolean;
   [TeamPreference.DisabledEmbeds]?: string[];
   [TeamPreference.Theme]?: string;
+  [TeamPreference.ThemeMode]?: "default" | "advanced";
 };
 
 export enum NavigationNodeType {

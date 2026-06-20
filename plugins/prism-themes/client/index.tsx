@@ -9,6 +9,7 @@ PluginManager.add([
     type: Hook.Settings,
     value: {
       group: "Workspace",
+      after: "Details",
       icon: Icon,
       description: "Apply a workspace-wide, full-surface UI theme.",
       component: createLazyComponent(() => import("./ThemeSettings")),

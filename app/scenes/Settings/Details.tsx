@@ -32,6 +32,7 @@ import TeamDelete from "../TeamDelete";
 import { ActionRow } from "./components/ActionRow";
 import ImageInput from "./components/ImageInput";
 import SettingRow from "./components/SettingRow";
+import ThemeModeToggle from "../../../plugins/prism-themes/client/ThemeModeToggle";
 
 function Details() {
   const { dialogs, ui } = useStores();
@@ -47,6 +48,8 @@ function Details() {
   const [accentText, setAccentText] = useState<null | undefined | string>(
     team.preferences?.customTheme?.accentText
   );
+  const themeAdvanced =
+    team.getPreference(TeamPreference.ThemeMode) === "advanced";
   const [name, setName] = useState(team.name);
   const [description, setDescription] = useState(team.description || "");
   const [subdomain, setSubdomain] = useState(team.subdomain);
@@ -274,11 +277,13 @@ function Details() {
               </>
             }
           >
+            <ThemeModeToggle />
             <InputColor
               id="accent"
               value={accent ?? theme.accent}
               label={t("Accent color")}
               onChange={setAccent}
+              disabled={themeAdvanced}
               flex
             />
             <InputColor
@@ -286,6 +291,7 @@ function Details() {
               value={accentText ?? theme.accentText}
               label={t("Accent text color")}
               onChange={setAccentText}
+              disabled={themeAdvanced}
               flex
             />
           </SettingRow>

@@ -72,6 +72,8 @@ export const TeamsUpdateSchema = BaseSchema.extend({
         disabledEmbeds: z.array(z.string()).optional(),
         /** The id of the team's selected full-surface theme preset. */
         theme: z.string().max(100).optional(),
+        /** Theme mode: "default" (stock accent) or "advanced" (Prism theme). */
+        themeMode: z.enum(["default", "advanced"]).optional(),
       })
       .optional(),
   }),
