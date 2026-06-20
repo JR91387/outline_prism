@@ -1,10 +1,16 @@
-import { mkdir, writeFile } from "fs/promises";
+import { mkdir, readFile, readdir, writeFile } from "fs/promises";
 import path from "path";
-import { CollectionPermission, UserRole } from "@shared/types";
+import {
+  AttachmentPreset,
+  CollectionPermission,
+  UserRole,
+} from "@shared/types";
 import slugify from "@shared/utils/slugify";
+import attachmentCreator from "@server/commands/attachmentCreator";
 import teamCreator from "@server/commands/teamCreator";
 import { createContext } from "@server/context";
 import env from "@server/env";
+import Logger from "@server/logging/Logger";
 import { ApiKey, Collection, Document, Team, User } from "@server/models";
 import { DocumentHelper } from "@server/models/helpers/DocumentHelper";
 import type { APIContext } from "@server/types";
@@ -19,11 +25,89 @@ export const TOKEN_FILE = path.join(
   "claude-token.txt"
 );
 
+/** Source assets bundled with the plugin (resolved against the app's working
+ * directory, which the image's COPY . . places at /opt/outline). Re-uploaded on
+ * each fresh provision so the demo pages' images/PDFs/decks survive a
+ * from-scratch deployment. */
+const MEDIA_DIR = path.resolve("plugins", "prism-devmode", "server", "media");
+
+const MEDIA_MIME: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".pdf": "application/pdf",
+  ".ppt": "application/vnd.ms-powerpoint",
+};
+
+/**
+ * Uploads every file in media/ as a workspace attachment and returns a
+ * filename -> redirect-URL map. Fail-soft: a file that cannot be read or
+ * uploaded is logged and skipped rather than aborting the whole provision.
+ *
+ * @param ctx the route API context (carries the open transaction).
+ * @param user the owner for the created attachments.
+ * @returns a map of media filename to its attachment redirect URL.
+ */
+async function uploadMedia(
+  ctx: APIContext,
+  user: User
+): Promise<Map<string, string>> {
+  const urls = new Map<string, string>();
+  let files: string[] = [];
+  try {
+    files = await readdir(MEDIA_DIR);
+  } catch (err) {
+    Logger.warn("prism-devmode: media dir unreadable; skipping attachments", {
+      err,
+    });
+    return urls;
+  }
+  for (const name of files) {
+    try {
+      const buffer = await readFile(path.join(MEDIA_DIR, name));
+      const type =
+        MEDIA_MIME[path.extname(name).toLowerCase()] ??
+        "application/octet-stream";
+      const attachment = await attachmentCreator({
+        name,
+        user,
+        preset: AttachmentPreset.DocumentAttachment,
+        ctx,
+        buffer,
+        type,
+      });
+      if (attachment) {
+        urls.set(name, attachment.url);
+      }
+    } catch (err) {
+      Logger.warn(`prism-devmode: failed to upload media "${name}"`, { err });
+    }
+  }
+  return urls;
+}
+
+/**
+ * Replaces `prism-media://<filename>` tokens in seed text with real attachment
+ * URLs. Any token left unresolved is replaced with a harmless placeholder so a
+ * literal token never reaches a published document.
+ */
+function resolveMedia(text: string, urls: Map<string, string>): string {
+  return text.replace(/prism-media:\/\/([^\s)"']+)/g, (_match, file) => {
+    const url = urls.get(file);
+    if (url) {
+      return url;
+    }
+    Logger.warn(`prism-devmode: unresolved media token "${file}"`);
+    return "#missing-media";
+  });
+}
+
 async function createDoc(
   context: ReturnType<typeof createContext>,
   collection: Collection,
   node: DemoDoc,
-  parentDocumentId: string | null
+  parentDocumentId: string | null,
+  mediaUrls: Map<string, string>
 ) {
   const document = await Document.createWithCtx(context, {
     version: 2,
@@ -33,7 +117,7 @@ async function createDoc(
     lastModifiedById: collection.createdById,
     createdById: collection.createdById,
     title: node.title,
-    text: node.text,
+    text: resolveMedia(node.text, mediaUrls),
   });
   document.content = await DocumentHelper.toJSON(document);
   await document.publish(context, {
@@ -41,7 +125,7 @@ async function createDoc(
     silent: true,
   });
   for (const child of node.children ?? []) {
-    await createDoc(context, collection, child, document.id);
+    await createDoc(context, collection, child, document.id, mediaUrls);
   }
 }
 
@@ -78,6 +162,9 @@ export async function provisionDevWorkspace(ctx: APIContext) {
 
   const context = createContext({ ...ctx, transaction, user: admin });
 
+  // Upload bundled media first so demo pages can resolve prism-media:// tokens.
+  const mediaUrls = await uploadMedia(ctx, admin);
+
   for (const def of demoCollections) {
     const collection = await Collection.createWithCtx(context, {
       name: def.name,
@@ -90,7 +177,7 @@ export async function provisionDevWorkspace(ctx: APIContext) {
       permission: CollectionPermission.ReadWrite,
     });
     for (const node of def.docs) {
-      await createDoc(context, collection, node, null);
+      await createDoc(context, collection, node, null, mediaUrls);
     }
   }
 
