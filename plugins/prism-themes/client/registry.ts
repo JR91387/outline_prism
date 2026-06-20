@@ -1,5 +1,5 @@
-import type { ThemeDefinition } from "./types";
-import * as presets from "../themes";
+import type { ThemeDefinition } from "../shared/types";
+import * as presets from "./themes";
 
 const themes: Record<string, ThemeDefinition> = {};
 const themeList: ThemeDefinition[] = [];

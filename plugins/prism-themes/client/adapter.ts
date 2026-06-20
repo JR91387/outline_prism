@@ -1,6 +1,6 @@
 import { darken, lighten, readableColor, transparentize } from "polished";
 import type { DefaultTheme } from "styled-components";
-import type { ThemeDefinition } from "./types";
+import type { ThemeDefinition } from "../shared/types";
 
 /**
  * Maps a custom {@link ThemeDefinition} onto Outline's full styled-components

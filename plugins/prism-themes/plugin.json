@@ -1,0 +1,6 @@
+{
+  "id": "prism-themes",
+  "name": "Prism Themes",
+  "priority": 100,
+  "description": "Workspace-wide, full-surface UI themes for Prism. Adds a Themes settings page with selectable themes; the chosen theme is a team preference applied for everyone."
+}

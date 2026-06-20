@@ -32,7 +32,6 @@ import TeamDelete from "../TeamDelete";
 import { ActionRow } from "./components/ActionRow";
 import ImageInput from "./components/ImageInput";
 import SettingRow from "./components/SettingRow";
-import { ThemePicker } from "~/themes";
 
 function Details() {
   const { dialogs, ui } = useStores();
@@ -68,10 +67,6 @@ function Details() {
 
   const [tocPosition, setTocPosition] = useState(
     team.getPreference(TeamPreference.TocPosition) as TOCPosition
-  );
-
-  const [presetTheme, setPresetTheme] = useState<string | null>(
-    team.preferences?.theme ?? null
   );
 
   const tocPositionOptions: Option[] = React.useMemo(
@@ -112,7 +107,6 @@ function Details() {
             publicBranding,
             customTheme,
             tocPosition,
-            theme: presetTheme ?? undefined,
           },
         });
         toast.success(t("Settings saved"));
@@ -122,7 +116,6 @@ function Details() {
     },
     [
       tocPosition,
-      presetTheme,
       team,
       name,
       description,
@@ -281,27 +274,19 @@ function Details() {
               </>
             }
           >
-            <ThemePicker
-              value={presetTheme}
-              onChange={setPresetTheme}
-              defaultSlot={
-                <>
-                  <InputColor
-                    id="accent"
-                    value={accent ?? theme.accent}
-                    label={t("Accent color")}
-                    onChange={setAccent}
-                    flex
-                  />
-                  <InputColor
-                    id="accentText"
-                    value={accentText ?? theme.accentText}
-                    label={t("Accent text color")}
-                    onChange={setAccentText}
-                    flex
-                  />
-                </>
-              }
+            <InputColor
+              id="accent"
+              value={accent ?? theme.accent}
+              label={t("Accent color")}
+              onChange={setAccent}
+              flex
+            />
+            <InputColor
+              id="accentText"
+              value={accentText ?? theme.accentText}
+              label={t("Accent text color")}
+              onChange={setAccentText}
+              flex
             />
           </SettingRow>
           {(team.avatarUrl || team.description) && (

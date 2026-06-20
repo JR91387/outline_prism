@@ -9,7 +9,10 @@ import { isRTLLanguage } from "@shared/utils/rtl";
 import useBuildTheme from "~/hooks/useBuildTheme";
 import useStores from "~/hooks/useStores";
 import { Theme as ColorMode } from "~/stores/UiStore";
-import { buildThemeFromDefinition, useSelectedTheme } from "~/themes";
+import {
+  buildThemeFromDefinition,
+  useSelectedTheme,
+} from "plugins/prism-themes/client";
 
 type Props = {
   children?: React.ReactNode;

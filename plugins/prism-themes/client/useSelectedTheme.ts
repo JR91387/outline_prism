@@ -1,7 +1,7 @@
 import { TeamPreference } from "@shared/types";
 import useStores from "~/hooks/useStores";
-import { getTheme } from "./core/registry";
-import type { ThemeDefinition } from "./core/types";
+import { getTheme } from "./registry";
+import type { ThemeDefinition } from "../shared/types";
 
 /**
  * Reads the workspace's selected theme — a server-side team preference, so it

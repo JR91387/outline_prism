@@ -1,4 +1,4 @@
-import type { ThemeDefinition } from "../core";
+import type { ThemeDefinition } from "../../shared/types";
 
 export const atomDark: ThemeDefinition = {
   id: "atom-dark",

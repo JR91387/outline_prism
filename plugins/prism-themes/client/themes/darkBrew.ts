@@ -1,4 +1,4 @@
-import type { ThemeDefinition } from "../core";
+import type { ThemeDefinition } from "../../shared/types";
 
 export const darkBrew: ThemeDefinition = {
   id: "dark-brew",
