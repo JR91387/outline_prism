@@ -1,4 +1,39 @@
 <p align="center">
+  <img src="./public/prism-banner.svg" alt="Prism — refract your workspace, a themeable fork of Outline" width="620">
+</p>
+
+> ### 🔷 Prism — a themeable fork of Outline
+>
+> Prism is **the Outline documentation and knowledge base system, forked to add a custom
+> theme system** — nothing else here diverges from upstream.
+>
+> **What Prism adds:** workspace-wide, full-surface UI **themes**. An admin picks a theme in
+> **Settings → Details**, and the entire workspace is reskinned — background, sidebar, text,
+> code blocks, tables, callouts, and more — going well beyond Outline's built-in light/dark
+> and accent colors. Everything else is stock Outline.
+>
+> **Status:** an independent fork. I don't intend to push this upstream unless the
+> maintainers want it — clone it, build on it, send ideas. I love the original product; I
+> just wanted deeper control over the look.
+>
+> ### License &amp; attribution
+>
+> Prism is a fork of **[Outline](https://github.com/outline/outline)** by **General Outline, Inc.**,
+> and is distributed under the same **[Business Source License 1.1](LICENSE)** (which converts
+> to Apache&nbsp;2.0 on 2030-06-06). All credit for Outline goes to its original authors; the
+> upstream README is preserved below, unchanged.
+>
+> **Prism is an independent fork and is not affiliated with, sponsored by, or endorsed by
+> General Outline, Inc. "Outline" is a trademark of General Outline, Inc.; it is used here
+> only to describe Prism's origin.**
+
+---
+
+
+
+
+
+<p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="./public/logos/outline-logo-dark.png" height="29">
     <source media="(prefers-color-scheme: light)" srcset="./public/logos/outline-logo-light.png" height="29">
