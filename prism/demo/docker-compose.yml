@@ -1,0 +1,47 @@
+# Prism demo stack — local evaluation of the fork (themes + demo content).
+# Isolated under prism/ ; references upstream source only via the build context.
+#
+#   cd prism/demo && cp .env.example .env   # then fill the two secrets
+#   docker compose up --build
+#
+name: prism-demo
+
+services:
+  app:
+    build:
+      context: ../..                 # repo root (so the build sees the full source)
+      dockerfile: prism/demo/Dockerfile
+    env_file: .env
+    ports:
+      - "${HOST_PORT:-3939}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - prism_files:/var/lib/outline/data
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: outline
+      POSTGRES_PASSWORD: outline
+      POSTGRES_DB: outline
+    volumes:
+      - prism_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U outline -d outline"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    volumes:
+      - prism_redis:/data
+
+volumes:
+  prism_pg:
+  prism_redis:
+  prism_files:
