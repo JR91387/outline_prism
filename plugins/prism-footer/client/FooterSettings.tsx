@@ -41,8 +41,9 @@ function FooterSettings() {
 
   const handleSave = React.useMemo(
     () =>
-      debounce(async (getValue: (asString: boolean) => string) => {
-        const markdown = getValue(false);
+      debounce(async (getValue: (asString?: boolean) => string) => {
+        // asString=true returns markdown; the footer field/schema is a string.
+        const markdown = getValue(true);
         try {
           const preferences = { ...team.preferences };
           if (target === WORKSPACE) {

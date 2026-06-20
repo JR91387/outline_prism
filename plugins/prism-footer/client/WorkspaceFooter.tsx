@@ -43,9 +43,16 @@ function WorkspaceFooter({ document }: Props) {
 
   return (
     <Footer contentEditable={false}>
-      {/* key re-mounts the editor when the footer content changes, since the
-          editor only reads defaultValue on mount. */}
-      <Editor key={markdown} readOnly embedsDisabled defaultValue={markdown} />
+      {/* key re-mounts the editor when the footer content changes; value +
+          defaultValue feed the markdown the way Outline's read-only editors do
+          (Document.tsx), so it parses to rich content rather than raw text. */}
+      <Editor
+        key={markdown}
+        readOnly
+        embedsDisabled
+        value={markdown}
+        defaultValue={markdown}
+      />
     </Footer>
   );
 }
