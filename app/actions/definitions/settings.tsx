@@ -1,7 +1,20 @@
-import { SunIcon, MoonIcon, BrowserIcon } from "outline-icons";
-import { Theme } from "~/stores/UiStore";
+import { SunIcon, MoonIcon, BrowserIcon, PaletteIcon } from "outline-icons";
+import { TeamPreference } from "@shared/types";
 import { createAction, createActionWithChildren } from "~/actions";
 import { SettingsSection } from "~/actions/sections";
+import type RootStore from "~/stores/RootStore";
+import { Theme } from "~/stores/UiStore";
+import { getTheme } from "../../../plugins/prism-themes/client/registry";
+
+/** The active Prism workspace theme, if one overrides the per-user appearance. */
+function workspaceTheme(stores: RootStore) {
+  const team = stores.auth.team;
+  if (team?.getPreference(TeamPreference.ThemeMode) !== "advanced") {
+    return undefined;
+  }
+  const id = team.getPreference(TeamPreference.Theme);
+  return getTheme(typeof id === "string" ? id : undefined);
+}
 
 export const changeToDarkTheme = createAction({
   name: ({ t }) => t("Dark"),
@@ -11,6 +24,7 @@ export const changeToDarkTheme = createAction({
   keywords: "theme dark night",
   section: SettingsSection,
   selected: ({ stores }) => stores.ui.theme === "dark",
+  disabled: ({ stores }) => !!workspaceTheme(stores),
   perform: ({ stores }) => stores.ui.setTheme(Theme.Dark),
 });
 
@@ -22,6 +36,7 @@ export const changeToLightTheme = createAction({
   keywords: "theme light day",
   section: SettingsSection,
   selected: ({ stores }) => stores.ui.theme === "light",
+  disabled: ({ stores }) => !!workspaceTheme(stores),
   perform: ({ stores }) => stores.ui.setTheme(Theme.Light),
 });
 
@@ -48,7 +63,27 @@ export const changeToSystemTheme = createAction({
   keywords: "theme system default",
   section: SettingsSection,
   selected: ({ stores }) => stores.ui.theme === "system",
+  disabled: ({ stores }) => !!workspaceTheme(stores),
   perform: ({ stores }) => stores.ui.setTheme(Theme.System),
+});
+
+export const workspaceThemeNotice = createAction({
+  name: ({ stores, t }) => {
+    const theme = workspaceTheme(stores);
+    return theme
+      ? t("Set by workspace theme: {{ name }}", { name: theme.name })
+      : "";
+  },
+  analyticsName: "Workspace theme notice",
+  icon: <PaletteIcon />,
+  iconInContextMenu: false,
+  section: SettingsSection,
+  visible: ({ stores }) => !!workspaceTheme(stores),
+  disabled: true,
+  perform: () => {
+    // Informational only — appearance is controlled by the workspace theme
+    // (Settings → Themes).
+  },
 });
 
 export const changeTheme = createActionWithChildren({
@@ -59,7 +94,12 @@ export const changeTheme = createActionWithChildren({
     stores.ui.resolvedTheme === "light" ? <SunIcon /> : <MoonIcon />,
   keywords: "appearance display",
   section: SettingsSection,
-  children: [changeToLightTheme, changeToDarkTheme, changeToSystemTheme],
+  children: [
+    changeToLightTheme,
+    changeToDarkTheme,
+    changeToSystemTheme,
+    workspaceThemeNotice,
+  ],
 });
 
 export const rootSettingsActions = [changeTheme, toggleTheme];
