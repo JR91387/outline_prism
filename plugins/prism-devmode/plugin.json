@@ -1,0 +1,6 @@
+{
+  "id": "prism-devmode",
+  "name": "Prism Dev Mode",
+  "priority": 1000,
+  "description": "Dev-only one-click bootstrap: provisions a populated workspace, two users (Jerry admin + Claude), demo collections/pages, and a readable API key. Gated entirely by the PRISM_DEVMODE env var — inert otherwise."
+}

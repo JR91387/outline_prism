@@ -24,6 +24,7 @@ import PageTitle from "~/components/PageTitle";
 import TeamLogo from "~/components/TeamLogo";
 import Text from "~/components/Text";
 import env from "~/env";
+import { DevModeButton } from "plugins/prism-devmode/client/DevModeButton";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import {
   useLastVisitedPath,
@@ -339,6 +340,7 @@ function Login({ children, onBack }: Props) {
           </>
         )}
         <Notices />
+        {env.PRISM_DEVMODE && <DevModeButton />}
         {defaultProvider && (
           <React.Fragment key={defaultProvider.id}>
             <AuthenticationProvider
