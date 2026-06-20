@@ -8,7 +8,9 @@ import Flex from "~/components/Flex";
 import Heading from "~/components/Heading";
 import Input from "~/components/Input";
 import Text from "~/components/Text";
+import env from "~/env";
 import { detectLanguage } from "~/utils/language";
+import { DevModeButton } from "../../../../plugins/prism-devmode/client/DevModeButton";
 import { BackButton } from "./BackButton";
 import { Background } from "./Background";
 import { Centered } from "./Centered";
@@ -61,6 +63,7 @@ const WorkspaceSetup = ({ onBack }: { onBack?: () => void }) => {
         <ButtonLarge type="submit" fullwidth>
           {t("Continue")} →
         </ButtonLarge>
+        {env.PRISM_DEVMODE && <DevModeButton />}
       </Centered>
     </Background>
   );
