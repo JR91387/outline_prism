@@ -70,11 +70,12 @@ function ThemeModeToggle() {
 export default observer(ThemeModeToggle);
 
 const Wrapper = styled.div`
-  flex: 1 0 100%;
+  flex: 0 0 auto;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 8px;
-  margin-bottom: 6px;
+  margin-bottom: 12px;
 `;
 
 const Segmented = styled.div`

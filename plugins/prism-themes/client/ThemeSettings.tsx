@@ -27,14 +27,34 @@ function ThemeSettings() {
   const selected = typeof raw === "string" ? raw : undefined;
   const advanced = team.getPreference(TeamPreference.ThemeMode) === "advanced";
 
+  // Serialize saves so fast clicks can't fire overlapping team.save() calls
+  // (which race, error, and wedge the picker). Last click wins: while a save is
+  // in flight, remember the latest requested id and apply it once done.
+  const savingRef = React.useRef(false);
+  const pendingRef = React.useRef<string | null>(null);
+
   const save = async (id: string) => {
+    if (savingRef.current) {
+      pendingRef.current = id;
+      return;
+    }
+    savingRef.current = true;
     try {
       await team.save({
         preferences: { ...team.preferences, theme: id },
       });
-      toast.success(t("Settings saved"));
+      if (!pendingRef.current) {
+        toast.success(t("Settings saved"));
+      }
     } catch (_err) {
       toast.error(t("Could not save settings"));
+    } finally {
+      savingRef.current = false;
+      const next = pendingRef.current;
+      pendingRef.current = null;
+      if (next && next !== id) {
+        void save(next);
+      }
     }
   };
 
