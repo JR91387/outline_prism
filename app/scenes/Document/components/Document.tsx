@@ -40,6 +40,7 @@ import Notices from "./Notices";
 import References from "./References";
 import RevisionViewer from "./RevisionViewer";
 import SharedHeader from "./SharedHeader";
+import WorkspaceFooter from "../../../../plugins/prism-footer/client/WorkspaceFooter";
 
 type LocationState = {
   title?: string;
@@ -424,6 +425,7 @@ function DocumentScene({
                         <References document={document} />
                       </ReferencesWrapper>
                     </Editor>
+                    <WorkspaceFooter document={document} />
                   </>
                 )}
               </MeasuredContainer>

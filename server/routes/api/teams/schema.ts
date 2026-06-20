@@ -74,6 +74,12 @@ export const TeamsUpdateSchema = BaseSchema.extend({
         theme: z.string().max(100).optional(),
         /** Theme mode: "default" (stock accent) or "advanced" (Prism theme). */
         themeMode: z.enum(["default", "advanced"]).optional(),
+        /** Workspace-wide footer markdown rendered at the bottom of every doc. */
+        footer: z.string().max(50000).optional(),
+        /** Per-collection footer overrides, keyed by collection id. */
+        collectionFooters: z
+          .record(z.string(), z.string().max(50000))
+          .optional(),
       })
       .optional(),
   }),

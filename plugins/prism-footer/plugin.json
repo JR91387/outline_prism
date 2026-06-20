@@ -1,0 +1,6 @@
+{
+  "id": "prism-footer",
+  "name": "Prism Footer",
+  "priority": 100,
+  "description": "Workspace and per-collection page footers for Prism. Adds a Workspace Footer settings page where an admin authors rich content (the full editor) that renders, read-only, at the bottom of every document. Stored as team preferences."
+}

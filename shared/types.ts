@@ -438,6 +438,10 @@ export enum TeamPreference {
   Theme = "theme",
   /** Theme mode: "default" (stock accent) or "advanced" (Prism theme). */
   ThemeMode = "themeMode",
+  /** Workspace-wide footer markdown rendered at the bottom of every doc (fork). */
+  Footer = "footer",
+  /** Per-collection footer overrides, keyed by collection id (fork feature). */
+  CollectionFooters = "collectionFooters",
 }
 
 export type TeamPreferences = {
@@ -457,6 +461,8 @@ export type TeamPreferences = {
   [TeamPreference.DisabledEmbeds]?: string[];
   [TeamPreference.Theme]?: string;
   [TeamPreference.ThemeMode]?: "default" | "advanced";
+  [TeamPreference.Footer]?: string;
+  [TeamPreference.CollectionFooters]?: Record<string, string>;
 };
 
 export enum NavigationNodeType {
