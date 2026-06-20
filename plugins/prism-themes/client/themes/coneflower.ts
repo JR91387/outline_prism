@@ -1,10 +1,10 @@
 import type { ThemeDefinition } from "../../shared/types";
 
-export const flash: ThemeDefinition = {
-  id: "flash",
-  name: "Flash",
+export const coneflower: ThemeDefinition = {
+  id: "coneflower",
+  name: "Coneflower",
   mode: "light",
-  preview: "./flash.png",
+  preview: "./coneflower.png",
   colors: {
     canvas: "#fff8e8",
     surface: "#ffffff",
