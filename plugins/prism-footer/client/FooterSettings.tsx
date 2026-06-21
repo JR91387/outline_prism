@@ -41,10 +41,18 @@ function FooterSettings() {
   const collectionFooters = team.getPreference(
     TeamPreference.CollectionFooters
   );
-  const value =
+  const stored =
     target === WORKSPACE
-      ? team.getPreference(TeamPreference.Footer) || undefined
-      : (collectionFooters && collectionFooters[target]) || undefined;
+      ? team.getPreference(TeamPreference.Footer)
+      : collectionFooters && collectionFooters[target];
+  // Only feed real content to the editor; an empty/absent footer starts blank.
+  // (Loading an empty doc into the editor has tripped fromJSON.)
+  const value =
+    stored &&
+    typeof stored === "object" &&
+    !ProsemirrorHelper.isEmptyData(stored)
+      ? stored
+      : undefined;
 
   const handleSave = React.useMemo(
     () =>
@@ -67,6 +75,7 @@ function FooterSettings() {
             preferences.collectionFooters = map;
           }
           await team.save({ preferences });
+          toast.success(t("Footer saved"));
         } catch (_err) {
           toast.error(t("Could not save settings"));
         }
@@ -90,7 +99,7 @@ function FooterSettings() {
       <Heading>{t("Workspace Footer")}</Heading>
       <Text as="p" type="secondary">
         {t(
-          "Content shown at the bottom of every document. Set a workspace-wide default, or override it for a specific collection. Leave empty for no footer."
+          "Content shown at the bottom of every document. Set a workspace-wide default, or override it for a specific collection. Leave empty for no footer. Changes save automatically as you edit."
         )}
       </Text>
 
