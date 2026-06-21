@@ -461,8 +461,8 @@ export type TeamPreferences = {
   [TeamPreference.DisabledEmbeds]?: string[];
   [TeamPreference.Theme]?: string;
   [TeamPreference.ThemeMode]?: "default" | "advanced";
-  [TeamPreference.Footer]?: string;
-  [TeamPreference.CollectionFooters]?: Record<string, string>;
+  [TeamPreference.Footer]?: ProsemirrorData;
+  [TeamPreference.CollectionFooters]?: Record<string, ProsemirrorData>;
 };
 
 export enum NavigationNodeType {

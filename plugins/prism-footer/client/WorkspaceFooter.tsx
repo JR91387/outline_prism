@@ -1,7 +1,9 @@
 import { observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
+import { richExtensions } from "@shared/editor/nodes";
 import { TeamPreference } from "@shared/types";
+import { ProsemirrorHelper } from "@shared/utils/ProsemirrorHelper";
 import Editor from "~/components/Editor";
 import useStores from "~/hooks/useStores";
 import type Document from "~/models/Document";
@@ -34,24 +36,28 @@ function WorkspaceFooter({ document }: Props) {
     document.collectionId && overrides
       ? overrides[document.collectionId]
       : undefined;
-  const fallback = team.getPreference(TeamPreference.Footer);
-  const markdown = override || (typeof fallback === "string" ? fallback : "");
+  const data = override ?? team.getPreference(TeamPreference.Footer);
 
-  if (!markdown.trim()) {
+  if (
+    !data ||
+    typeof data !== "object" ||
+    ProsemirrorHelper.isEmptyData(data)
+  ) {
     return null;
   }
 
   return (
     <Footer contentEditable={false}>
-      {/* key re-mounts the editor when the footer content changes; value +
-          defaultValue feed the markdown the way Outline's read-only editors do
-          (Document.tsx), so it parses to rich content rather than raw text. */}
+      {/* Feed the stored ProseMirror data via value + defaultValue, the way
+          Outline's read-only editors do (Document.tsx); this renders rich.
+          (A markdown string fed here renders raw — the client editor hydrates
+          from ProseMirror data, not via markdown parsing.) */}
       <Editor
-        key={markdown}
         readOnly
         embedsDisabled
-        value={markdown}
-        defaultValue={markdown}
+        extensions={richExtensions}
+        value={data}
+        defaultValue={data}
       />
     </Footer>
   );

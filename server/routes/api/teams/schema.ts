@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { EmailDisplay, TOCPosition, UserRole } from "@shared/types";
 import { TeamValidation } from "@shared/validations";
-import { BaseSchema } from "@server/routes/api/schema";
+import { BaseSchema, ProsemirrorSchema } from "@server/routes/api/schema";
 
 export const TeamsUpdateSchema = BaseSchema.extend({
   body: z.object({
@@ -74,11 +74,11 @@ export const TeamsUpdateSchema = BaseSchema.extend({
         theme: z.string().max(100).optional(),
         /** Theme mode: "default" (stock accent) or "advanced" (Prism theme). */
         themeMode: z.enum(["default", "advanced"]).optional(),
-        /** Workspace-wide footer markdown rendered at the bottom of every doc. */
-        footer: z.string().max(50000).optional(),
-        /** Per-collection footer overrides, keyed by collection id. */
+        /** Workspace-wide footer (rich content) rendered at the bottom of every doc. */
+        footer: ProsemirrorSchema({ allowEmpty: true }).optional(),
+        /** Per-collection footer overrides (rich content), keyed by collection id. */
         collectionFooters: z
-          .record(z.string(), z.string().max(50000))
+          .record(z.string(), ProsemirrorSchema({ allowEmpty: true }))
           .optional(),
       })
       .optional(),

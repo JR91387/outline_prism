@@ -4,17 +4,24 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import styled from "styled-components";
-import { TeamPreference } from "@shared/types";
+import { richExtensions } from "@shared/editor/nodes";
+import { type ProsemirrorData, TeamPreference } from "@shared/types";
+import { ProsemirrorHelper } from "@shared/utils/ProsemirrorHelper";
 import Editor from "~/components/Editor";
 import Heading from "~/components/Heading";
 import { InputSelect, type Option } from "~/components/InputSelect";
 import Scene from "~/components/Scene";
 import Text from "~/components/Text";
+import { withUIExtensions } from "~/editor/extensions";
 import useCurrentTeam from "~/hooks/useCurrentTeam";
 import useStores from "~/hooks/useStores";
 import Icon from "./Icon";
 
 const WORKSPACE = "workspace";
+
+/** Full rich editor extensions (headings, tables, callouts, etc.) so the footer
+ * editor has the same schema as document editing — basicExtensions omits them. */
+const extensions = withUIExtensions(richExtensions);
 
 /**
  * Workspace Footer settings page (Hook.Settings). An admin authors rich content
@@ -36,24 +43,26 @@ function FooterSettings() {
   );
   const value =
     target === WORKSPACE
-      ? team.getPreference(TeamPreference.Footer) || ""
-      : (collectionFooters && collectionFooters[target]) || "";
+      ? team.getPreference(TeamPreference.Footer) || undefined
+      : (collectionFooters && collectionFooters[target]) || undefined;
 
   const handleSave = React.useMemo(
     () =>
-      debounce(async (getValue: (asString?: boolean) => string) => {
-        // asString=true returns markdown; the footer field/schema is a string.
-        const markdown = getValue(true);
+      debounce(async (getValue: (asString?: boolean) => ProsemirrorData) => {
+        // asString=false returns ProseMirror data, which the footer field stores
+        // and WorkspaceFooter hydrates read-only into rich content.
+        const data = getValue(false);
+        const empty = !data || ProsemirrorHelper.isEmptyData(data);
         try {
           const preferences = { ...team.preferences };
           if (target === WORKSPACE) {
-            preferences.footer = markdown.trim() ? markdown : undefined;
+            preferences.footer = empty ? undefined : data;
           } else {
             const map = { ...preferences.collectionFooters };
-            if (markdown.trim()) {
-              map[target] = markdown;
-            } else {
+            if (empty) {
               delete map[target];
+            } else {
+              map[target] = data;
             }
             preferences.collectionFooters = map;
           }
@@ -101,6 +110,7 @@ function FooterSettings() {
           key={target}
           defaultValue={value}
           onChange={handleSave}
+          extensions={extensions}
           placeholder={`${t("Add a footer")}…`}
         />
       </EditorFrame>
