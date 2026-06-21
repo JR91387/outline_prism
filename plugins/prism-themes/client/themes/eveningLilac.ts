@@ -12,7 +12,7 @@ export const eveningLilac: ThemeDefinition = {
     sidebar: "#1f252d",
     header: "#232a32",
     text: "#e7e7ea",
-    textMuted: "#a1adba",
+    textMuted: "#a2aebb",
     accent: "#c9a8ff",
     border: "#3e4858",
     codeBackground: "#1a1f27",

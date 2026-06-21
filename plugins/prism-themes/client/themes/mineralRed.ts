@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const mineralRed: ThemeDefinition = {
   id: "mineral-red",
-  name: "Mineral Red",
+  name: "Red Slate",
   mode: "light",
   preview: "./mineralRed.png",
   colors: {
@@ -12,7 +12,7 @@ export const mineralRed: ThemeDefinition = {
     sidebar: "#292c2e",
     header: "#2c2c2c",
     text: "#2c2c2c",
-    textMuted: "#727272",
+    textMuted: "#646464",
     accent: "#cb4c48",
     border: "#d7d7d7",
     codeBackground: "#f0f0f0",

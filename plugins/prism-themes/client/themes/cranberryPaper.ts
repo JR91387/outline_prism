@@ -12,7 +12,7 @@ export const cranberryPaper: ThemeDefinition = {
     sidebar: "#f0dcc8",
     header: "#e8d4bc",
     text: "#3d2817",
-    textMuted: "#8b6f47",
+    textMuted: "#685335",
     accent: "#a52a2a",
     border: "#d4a574",
     codeBackground: "#fdfaf5",

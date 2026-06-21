@@ -12,7 +12,7 @@ export const cranberryLeather: ThemeDefinition = {
     sidebar: "#332d27",
     header: "#2f291f",
     text: "#e8d4bc",
-    textMuted: "#a89060",
+    textMuted: "#c1b08e",
     accent: "#e8533a",
     border: "#6b5344",
     codeBackground: "#1f1a15",

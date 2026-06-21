@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const hacker: ThemeDefinition = {
   id: "hacker",
-  name: "Hacker",
+  name: "Phosphor Terminal",
   mode: "dark",
   preview: "./hacker.png",
   colors: {

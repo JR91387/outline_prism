@@ -12,7 +12,7 @@ export const cupertinoLight: ThemeDefinition = {
     sidebar: "#ececf0",
     header: "#ffffff",
     text: "#1d1d1f",
-    textMuted: "#6e6e73",
+    textMuted: "#6d6d72",
     accent: "#0071e3",
     border: "#d2d2d7",
     codeBackground: "#f2f2f4",

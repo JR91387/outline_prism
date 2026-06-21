@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const storm: ThemeDefinition = {
   id: "storm",
-  name: "Storm",
+  name: "Stormglass",
   mode: "light",
   preview: "./storm.png",
   colors: {
@@ -12,7 +12,7 @@ export const storm: ThemeDefinition = {
     sidebar: "#d5dceb",
     header: "#cbd4e6",
     text: "#343b58",
-    textMuted: "#6b7394",
+    textMuted: "#5a617c",
     accent: "#34548a",
     border: "#b9c2d6",
     codeBackground: "#d8deeb",

@@ -12,7 +12,7 @@ export const graphiteEmber: ThemeDefinition = {
     sidebar: "#242729",
     header: "#252729",
     text: "#d8d8d8",
-    textMuted: "#969696",
+    textMuted: "#a7a7a7",
     accent: "#cb4c48",
     border: "#4c4c4c",
     codeBackground: "#202020",

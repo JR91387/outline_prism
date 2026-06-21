@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const coneflower: ThemeDefinition = {
   id: "coneflower",
-  name: "Coneflower",
+  name: "Goldenrod",
   mode: "light",
   preview: "./coneflower.png",
   colors: {

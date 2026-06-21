@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const night: ThemeDefinition = {
   id: "night",
-  name: "Night",
+  name: "Indigo Night",
   mode: "dark",
   preview: "./night.png",
   colors: {

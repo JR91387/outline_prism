@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const throwbackGrey: ThemeDefinition = {
   id: "throwback-grey",
-  name: "Throwback Grey",
+  name: "Retro Slate",
   mode: "light",
   preview: "./throwbackGrey.png",
   colors: {
@@ -12,7 +12,7 @@ export const throwbackGrey: ThemeDefinition = {
     sidebar: "#bdbebd",
     header: "#bdbebd",
     text: "#222222",
-    textMuted: "#808080",
+    textMuted: "#4d4d4d",
     accent: "#000080",
     border: "#808080",
     codeBackground: "#f6f6f6",

@@ -12,7 +12,7 @@ export const atomDark: ThemeDefinition = {
     sidebar: "#21252b",
     header: "#1d2025",
     text: "#abb2bf",
-    textMuted: "#7f848e",
+    textMuted: "#9398a0",
     accent: "#61afef",
     border: "#3e4451",
     codeBackground: "#1d2025",

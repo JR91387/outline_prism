@@ -12,7 +12,7 @@ export const lightBrew: ThemeDefinition = {
     sidebar: "#e5dcc8",
     header: "#d9ccb2",
     text: "#2f2a24",
-    textMuted: "#6f655b",
+    textMuted: "#696056",
     accent: "#8b5e3c",
     border: "#d2c5ad",
     codeBackground: "#e8deca",

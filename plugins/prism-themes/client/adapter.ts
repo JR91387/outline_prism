@@ -1,6 +1,51 @@
-import { darken, lighten, readableColor, transparentize } from "polished";
+import {
+  darken,
+  getLuminance,
+  lighten,
+  readableColor,
+  transparentize,
+} from "polished";
 import type { DefaultTheme } from "styled-components";
 import type { ThemeDefinition } from "../shared/types";
+
+/** WCAG 2.x contrast ratio between two CSS colors. */
+const contrastRatio = (a: string, b: string) => {
+  const la = getLuminance(a) + 0.05;
+  const lb = getLuminance(b) + 0.05;
+  return la > lb ? la / lb : lb / la;
+};
+
+/**
+ * Returns `fg` shifted just far enough in lightness to reach WCAG AA (4.5:1)
+ * against the worst of `bgs`, preserving hue. Direction is chosen from the
+ * worst background's own luminance — darken over a light background, lighten
+ * over a dark one — so it also handles a light theme whose sidebar is dark.
+ * Used for the derived `link` and `sidebarText` tokens (which authors never
+ * set directly); returns `fg` unchanged when it already passes.
+ */
+const makeAA = (fg: string, bgs: string[]) => {
+  const worst = (color: string) =>
+    bgs.reduce((m, b) => Math.min(m, contrastRatio(color, b)), Infinity);
+  if (worst(fg) >= 4.5) {
+    return fg;
+  }
+  const worstBg = bgs.reduce((w, b) =>
+    contrastRatio(fg, b) < contrastRatio(fg, w) ? b : w
+  );
+  const goDarker = getLuminance(worstBg) > 0.179;
+  let cur = fg;
+  for (let i = 0; i < 50; i++) {
+    const next = goDarker ? darken(0.02, cur) : lighten(0.02, cur);
+    if (next === cur) {
+      break;
+    }
+    cur = next;
+    if (worst(cur) >= 4.5) {
+      break;
+    }
+  }
+  return cur;
+};
 
 /**
  * Maps a custom {@link ThemeDefinition} onto Outline's full styled-components
@@ -65,7 +110,9 @@ export function buildThemeFromDefinition(
       // Accent, links, selection
       accent: c.accent,
       accentText: readableColor(c.accent),
-      link: c.accent,
+      // Inline links read `theme.link`; derive an AA-safe value so link text is
+      // legible while the vivid `accent` stays for selection/buttons/active.
+      link: makeAA(c.accent, [c.canvas, c.surface]),
       selected: c.accent,
       tableSelected: c.accent,
       tableSelectedBackground: transparentize(0.9, c.accent),
@@ -73,7 +120,9 @@ export function buildThemeFromDefinition(
 
       // Sidebar
       sidebarBackground: c.sidebar,
-      sidebarText: c.textMuted,
+      // Derive readable sidebar text against the sidebar's own background, so a
+      // light theme with a dark sidebar (or vice-versa) stays legible.
+      sidebarText: makeAA(c.textMuted, [c.sidebar]),
       sidebarHoverBackground: raise(0.05, c.sidebar),
       sidebarActiveBackground: raise(0.09, c.sidebar),
       sidebarControlHoverBackground: transparentize(0.8, c.text),

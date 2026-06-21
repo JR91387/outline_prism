@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const lilac: ThemeDefinition = {
   id: "lilac",
-  name: "Lilac",
+  name: "Lilac Frost",
   mode: "light",
   preview: "./lilac.png",
   colors: {

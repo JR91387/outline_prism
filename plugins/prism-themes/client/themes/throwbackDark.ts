@@ -2,7 +2,7 @@ import type { ThemeDefinition } from "../../shared/types";
 
 export const throwbackDark: ThemeDefinition = {
   id: "throwback-dark",
-  name: "Throwback Dark",
+  name: "Retro Signal",
   mode: "dark",
   preview: "./throwbackDark.png",
   colors: {
@@ -12,7 +12,7 @@ export const throwbackDark: ThemeDefinition = {
     sidebar: "#2d2d2d",
     header: "#1a1a1a",
     text: "#ffffff",
-    textMuted: "#b0b0b0",
+    textMuted: "#c1c1c1",
     accent: "#ff3030",
     border: "#808080",
     codeBackground: "#222222",

@@ -12,7 +12,7 @@ export const notationPaper: ThemeDefinition = {
     sidebar: "#f3f3f1",
     header: "#ffffff",
     text: "#37352f",
-    textMuted: "#787774",
+    textMuted: "#6f6e6b",
     accent: "#2f76c0",
     border: "#e2e2df",
     codeBackground: "#f1f1ef",
