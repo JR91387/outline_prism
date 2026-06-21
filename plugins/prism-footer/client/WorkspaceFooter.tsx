@@ -1,3 +1,4 @@
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import styled from "styled-components";
@@ -36,13 +37,16 @@ function WorkspaceFooter({ document }: Props) {
     document.collectionId && overrides
       ? overrides[document.collectionId]
       : undefined;
-  const data = override ?? team.getPreference(TeamPreference.Footer);
+  const raw = override ?? team.getPreference(TeamPreference.Footer);
 
-  if (
-    !data ||
-    typeof data !== "object" ||
-    ProsemirrorHelper.isEmptyData(data)
-  ) {
+  // team.preferences is deeply @observable; under mobx 4 its nested arrays are
+  // ObservableArrays that fail Array.isArray inside ProseMirror's
+  // Fragment.fromJSON, crashing the editor. toJS converts to plain JS so it can
+  // hydrate. (Outline's own editor avoids this because Document.data is
+  // @observable.shallow, keeping its arrays plain.)
+  const data = raw && typeof raw === "object" ? toJS(raw) : undefined;
+
+  if (!data || ProsemirrorHelper.isEmptyData(data)) {
     return null;
   }
 

@@ -1,4 +1,5 @@
 import { debounce } from "lodash";
+import { toJS } from "mobx";
 import { observer } from "mobx-react";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -47,11 +48,13 @@ function FooterSettings() {
       : collectionFooters && collectionFooters[target];
   // Only feed real content to the editor; an empty/absent footer starts blank.
   // (Loading an empty doc into the editor has tripped fromJSON.)
+  // toJS: team.preferences is deeply @observable; mobx-4 ObservableArrays fail
+  // Array.isArray in ProseMirror's Fragment.fromJSON. Convert to plain JS.
   const value =
     stored &&
     typeof stored === "object" &&
     !ProsemirrorHelper.isEmptyData(stored)
-      ? stored
+      ? toJS(stored)
       : undefined;
 
   const handleSave = React.useMemo(
