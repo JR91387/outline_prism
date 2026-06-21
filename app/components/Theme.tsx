@@ -10,6 +10,7 @@ import useBuildTheme from "~/hooks/useBuildTheme";
 import useStores from "~/hooks/useStores";
 import { Theme as ColorMode } from "~/stores/UiStore";
 import { buildThemeFromDefinition } from "../../plugins/prism-themes/client/adapter";
+import { PrismContentFont } from "../../plugins/prism-themes/client/PrismContentFont";
 import { PrismFonts } from "../../plugins/prism-themes/client/PrismFonts";
 import { useSelectedTheme } from "../../plugins/prism-themes/client/useSelectedTheme";
 
@@ -77,6 +78,7 @@ const Theme: React.FC = ({ children }: Props) => {
       <ThemeProvider theme={theme}>
         <>
           <PrismFonts />
+          <PrismContentFont font={selectedTheme?.typography.content} />
           <GlobalStyles
             useCursorPointer={
               // Default to showing the cursor pointer if no user is logged in (public share)
