@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionForest: ThemeDefinition = {
   id: "collection-internal-dark",
   name: "Collection_Forest",
+  group: "Collection",
   mode: "dark",
   preview: "./collectionForest.png",
   colors: {

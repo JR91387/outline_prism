@@ -27,6 +27,24 @@ function ThemeSettings() {
   const selected = typeof raw === "string" ? raw : undefined;
   const advanced = team.getPreference(TeamPreference.ThemeMode) === "advanced";
 
+  // Filter bar derived from the distinct brand groups present, so adding a new
+  // branded set (just tag its themes with `group`) surfaces a new button here
+  // with no code change. Hidden entirely when no grouped themes exist.
+  const all = t("All");
+  const general = t("General");
+  const brandGroups = React.useMemo(
+    () =>
+      Array.from(
+        new Set(themeList.map((th) => th.group).filter((g): g is string => !!g))
+      ).sort(),
+    []
+  );
+  const filters = brandGroups.length ? [all, general, ...brandGroups] : [];
+  const [filter, setFilter] = React.useState(all);
+  const shown = themeList.filter((th) =>
+    filter === all ? true : filter === general ? !th.group : th.group === filter
+  );
+
   // Serialize saves so fast clicks can't fire overlapping team.save() calls
   // (which race, error, and wedge the picker). Last click wins: while a save is
   // in flight, remember the latest requested id and apply it once done.
@@ -75,8 +93,24 @@ function ThemeSettings() {
         </Prompt>
       )}
 
+      {filters.length > 0 && (
+        <Filters role="tablist" $disabled={!advanced}>
+          {filters.map((f) => (
+            <FilterButton
+              key={f}
+              type="button"
+              $active={filter === f}
+              aria-pressed={filter === f}
+              onClick={() => setFilter(f)}
+            >
+              {f}
+            </FilterButton>
+          ))}
+        </Filters>
+      )}
+
       <Grid $disabled={!advanced} aria-disabled={!advanced}>
-        {themeList.map((theme) => (
+        {shown.map((theme) => (
           <ThemePreview
             key={theme.id}
             theme={theme}
@@ -98,6 +132,33 @@ const Prompt = styled.p`
   border-radius: 8px;
   font-size: 14px;
   color: ${(props) => props.theme.textSecondary};
+`;
+
+const Filters = styled.div<{ $disabled: boolean }>`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 16px;
+  opacity: ${(props) => (props.$disabled ? 0.45 : 1)};
+  pointer-events: ${(props) => (props.$disabled ? "none" : "auto")};
+`;
+
+const FilterButton = styled.button<{ $active: boolean }>`
+  padding: 6px 14px;
+  border-radius: 16px;
+  border: 1px solid
+    ${(props) => (props.$active ? props.theme.accent : props.theme.divider)};
+  background: ${(props) => (props.$active ? props.theme.accent : "transparent")};
+  color: ${(props) =>
+    props.$active ? props.theme.accentText : props.theme.text};
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 120ms ease;
+
+  &:hover {
+    border-color: ${(props) => props.theme.accent};
+  }
 `;
 
 const Grid = styled.div<{ $disabled: boolean }>`

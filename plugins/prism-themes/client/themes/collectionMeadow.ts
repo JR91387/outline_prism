@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionMeadow: ThemeDefinition = {
   id: "collection-internal",
   name: "Collection_Meadow",
+  group: "Collection",
   mode: "light",
   preview: "./collectionMeadow.png",
   colors: {

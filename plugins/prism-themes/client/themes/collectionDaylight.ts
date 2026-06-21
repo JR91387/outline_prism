@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionDaylight: ThemeDefinition = {
   id: "collection-llm-light",
   name: "Collection_Daylight",
+  group: "Collection",
   mode: "light",
   preview: "./collectionDaylight.png",
   colors: {

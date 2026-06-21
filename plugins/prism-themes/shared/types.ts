@@ -13,6 +13,14 @@ export type ThemeDefinition = {
   /** Human-readable label shown in Settings, e.g. "Light Brew". */
   name: string;
 
+  /**
+   * Optional brand/collection group for the theme picker's filter bar, e.g.
+   * "Collection". Themes without a group are shown under "General". The picker
+   * derives its filter buttons from the distinct groups present, so adding a new
+   * brand needs only this tag — no picker code change.
+   */
+  group?: string;
+
   /** Whether the theme is designed for a light or dark interface. */
   mode: ThemeMode;
 

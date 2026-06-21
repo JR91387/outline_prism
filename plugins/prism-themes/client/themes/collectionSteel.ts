@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionSteel: ThemeDefinition = {
   id: "collection-admin-dark",
   name: "Collection_Steel",
+  group: "Collection",
   mode: "dark",
   preview: "./collectionSteel.png",
   colors: {

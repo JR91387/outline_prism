@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionQuartz: ThemeDefinition = {
   id: "collection-admin",
   name: "Collection_Quartz",
+  group: "Collection",
   mode: "light",
   preview: "./collectionQuartz.png",
   colors: {

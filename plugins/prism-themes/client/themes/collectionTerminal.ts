@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionTerminal: ThemeDefinition = {
   id: "collection-llm",
   name: "Collection_Terminal",
+  group: "Collection",
   mode: "dark",
   preview: "./collectionTerminal.png",
   colors: {

@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionDaybreak: ThemeDefinition = {
   id: "collection",
   name: "Collection_Daybreak",
+  group: "Collection",
   mode: "light",
   preview: "./collectionDaybreak.png",
   colors: {

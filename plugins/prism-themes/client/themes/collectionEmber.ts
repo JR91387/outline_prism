@@ -5,6 +5,7 @@ import type { ThemeDefinition } from "../../shared/types";
 export const collectionEmber: ThemeDefinition = {
   id: "collection-dark",
   name: "Collection_Ember",
+  group: "Collection",
   mode: "dark",
   preview: "./collectionEmber.png",
   colors: {
