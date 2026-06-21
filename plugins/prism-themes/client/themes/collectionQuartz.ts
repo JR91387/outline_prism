@@ -12,7 +12,7 @@ export const collectionQuartz: ThemeDefinition = {
     canvas: "#f6f0e2",
     surface: "#fbf7ec",
     surfaceMuted: "#efe7d4",
-    sidebar: "#ecebe2",
+    sidebar: "#2c3327",
     header: "#2c3327",
     text: "#2c3327",
     textMuted: "#5e6b53",

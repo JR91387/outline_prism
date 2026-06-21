@@ -12,7 +12,7 @@ export const collectionMeadow: ThemeDefinition = {
     canvas: "#f6f0e2",
     surface: "#fbf7ec",
     surfaceMuted: "#efe7d4",
-    sidebar: "#ebeedd",
+    sidebar: "#c2410c",
     header: "#4d7c0f",
     text: "#2c3327",
     textMuted: "#5e6b53",

@@ -23,8 +23,8 @@ export const collectionTerminal: ThemeDefinition = {
     calloutBackground: "#161b22",
   },
   typography: {
-    ui: "'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-    content: "'IBM Plex Sans', Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+    ui: "'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
+    content: "'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
     mono: "'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
   },
   layout: {

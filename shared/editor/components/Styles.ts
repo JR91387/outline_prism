@@ -2672,7 +2672,7 @@ del {
 
   em,
   blockquote {
-    font-family: "SF Pro Text", ${props.theme.fontFamily};
+    font-family: var(--prism-content-font, "SF Pro Text", ${props.theme.fontFamily});
   }
 }
 

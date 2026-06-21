@@ -1,13 +1,11 @@
 export { atomDark } from "./atomDark";
 export { atomLight } from "./atomLight";
-// Collection company-branded themes (4 manuals × light/dark)
+// Collection company-branded themes (6; brand fonts IBM Plex)
 export { collectionDaybreak } from "./collectionDaybreak";
 export { collectionEmber } from "./collectionEmber";
 export { collectionQuartz } from "./collectionQuartz";
-export { collectionSteel } from "./collectionSteel";
 export { collectionMeadow } from "./collectionMeadow";
 export { collectionForest } from "./collectionForest";
-export { collectionDaylight } from "./collectionDaylight";
 export { collectionTerminal } from "./collectionTerminal";
 export { coneflower } from "./coneflower";
 export { cranberryLeather } from "./cranberryLeather";
