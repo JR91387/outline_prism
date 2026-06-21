@@ -32,6 +32,7 @@ import {
   presentCollection,
   presentDocument,
 } from "@server/presenters";
+import { resolveSignedFooter } from "../../../../plugins/prism-footer/server/resolveSignedFooter";
 import type { APIContext } from "@server/types";
 import { RateLimiterStrategy } from "@server/utils/RateLimiter";
 import { getTeamFromContext } from "@server/utils/passport";
@@ -100,6 +101,15 @@ router.post(
         team,
         !!team.getPreference(TeamPreference.PublicBranding)
       );
+      // Fork: resolve the per-collection footer override server-side (public
+      // documents have their collectionId stripped, so the client can't) and
+      // sign its images so they load for logged-out viewers. The single resolved
+      // footer replaces the raw per-collection map.
+      serializedTeam.footer = await resolveSignedFooter(
+        team,
+        document?.collectionId
+      );
+      serializedTeam.collectionFooters = undefined;
 
       ctx.body = {
         data: {

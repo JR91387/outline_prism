@@ -18,7 +18,6 @@ import Sidebar from "~/components/Sidebar/Shared";
 import { TeamContext } from "~/components/TeamContext";
 import Text from "~/components/Text";
 import env from "~/env";
-import useBuildTheme from "~/hooks/useBuildTheme";
 import useCurrentUser from "~/hooks/useCurrentUser";
 import useKeyDown from "~/hooks/useKeyDown";
 import { usePostLoginPath } from "~/hooks/useLastVisitedPath";
@@ -33,6 +32,8 @@ import Loading from "../Document/components/Loading";
 import ErrorOffline from "../Errors/ErrorOffline";
 import { Collection as CollectionScene } from "./Collection";
 import { Document as DocumentScene } from "./Document";
+import { PrismContentFont } from "../../../plugins/prism-themes/client/PrismContentFont";
+import { usePublicSelectedTheme } from "../../../plugins/prism-themes/client/usePublicSelectedTheme";
 import DelayedMount from "~/components/DelayedMount";
 import lazyWithRetry from "~/utils/lazyWithRetry";
 import { ShareContext } from "@shared/hooks/useShare";
@@ -135,7 +136,9 @@ function SharedScene() {
   const activePage = useActivePage(share);
 
   const team = share?.team;
-  const theme = useBuildTheme(team?.customTheme);
+  // Fork: apply the workspace's Prism theme (palette + fonts) to logged-out
+  // share viewers when exposed; falls back to the stock useBuildTheme result.
+  const { theme, contentFont } = usePublicSelectedTheme(team);
 
   const pageTitle =
     model instanceof Collection
@@ -262,6 +265,7 @@ function SharedScene() {
       </Helmet>
       <TeamContext.Provider value={team}>
         <ThemeProvider theme={theme}>
+          <PrismContentFont font={contentFont} />
           <DocumentContextProvider>
             <Layout
               title={pageTitle}

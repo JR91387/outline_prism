@@ -391,6 +391,11 @@ export type PublicTeam = {
   avatarUrl: string;
   name: string;
   customTheme: Partial<CustomTheme>;
+  /**
+   * Selected Prism theme id (fork). Present only when public branding is on and
+   * the workspace is in advanced theme mode; lets shares render the full theme.
+   */
+  prismTheme?: string;
   tocPosition: TOCPosition;
   /** Workspace footer (and per-collection overrides) for shared documents. */
   footer?: ProsemirrorData;
