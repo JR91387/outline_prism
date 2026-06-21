@@ -18,7 +18,7 @@ What it does:
   3. Writes plugins/prism-devmode/server/content.ts.
 
 Usage (from the repo root, with the dev stack running):
-    python3 prism/seed/capture_content.py
+    python3 prism-demo/seed/capture_content.py
 Then: yarn prettier --write plugins/prism-devmode/server/content.ts && yarn tsc --noEmit
 
 Assumes the default dev stack: containers prism-demo-app-1 / prism-demo-postgres-1,
@@ -39,7 +39,7 @@ CONTENT_TS = os.path.join(REPO, "plugins", "prism-devmode", "server", "content.t
 
 HEADER = """/**
  * Demo content for the Prism dev-mode workspace. Captured from the live dev
- * workspace by prism/seed/capture_content.py so a fresh provision reproduces the
+ * workspace by prism-demo/seed/capture_content.py so a fresh provision reproduces the
  * current pages (text, tree, titles, icons). Attachment references are stored as
  * `prism-media://<filename>` tokens that bootstrap.ts resolves by re-uploading
  * the matching file from this plugin's media/ directory. Consumed by

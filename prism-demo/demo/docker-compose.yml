@@ -1,7 +1,7 @@
 # Prism demo stack — local evaluation of the fork (themes + demo content).
-# Isolated under prism/ ; references upstream source only via the build context.
+# Isolated under prism-demo/ ; references upstream source only via the build context.
 #
-#   cd prism/demo && cp .env.example .env   # then fill the two secrets
+#   cd prism-demo/demo && cp .env.example .env   # then fill the two secrets
 #   docker compose up --build
 #
 name: prism-demo
@@ -10,7 +10,7 @@ services:
   app:
     build:
       context: ../..                 # repo root (so the build sees the full source)
-      dockerfile: prism/demo/Dockerfile
+      dockerfile: prism-demo/demo/Dockerfile
     env_file: .env
     ports:
       - "${HOST_PORT:-3939}:3000"

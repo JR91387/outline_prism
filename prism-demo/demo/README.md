@@ -11,7 +11,7 @@ only.** Everything here is isolated under `prism/`; no upstream files are touche
 
 ## 1. Configure
 ```bash
-cd prism/demo
+cd prism-demo/demo
 cp .env.example .env
 openssl rand -hex 32   # paste into SECRET_KEY in .env
 openssl rand -hex 32   # paste into UTILS_SECRET in .env

@@ -14,8 +14,8 @@
  * Usage:
  *   OUTLINE_URL=http://127.0.0.1:3939 \
  *   OUTLINE_TOKEN=ol_api_xxxxx \
- *   node prism/seed/demo-content.mjs
- *   # or: node prism/seed/demo-content.mjs <url> <token>
+ *   node prism-demo/seed/demo-content.mjs
+ *   # or: node prism-demo/seed/demo-content.mjs <url> <token>
  */
 
 const BASE = (process.env.OUTLINE_URL || process.argv[2] || "").replace(/\/+$/, "");
