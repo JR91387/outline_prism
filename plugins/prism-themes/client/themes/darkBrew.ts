@@ -21,7 +21,7 @@ export const darkBrew: ThemeDefinition = {
   },
   typography: {
     ui: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-    content: "Georgia, Times New Roman, serif",
+    content: "Georgia, 'Libertinus Serif', Times New Roman, serif",
     mono: "SFMono-Regular, Consolas, Liberation Mono, monospace",
   },
   layout: {

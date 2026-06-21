@@ -61,6 +61,8 @@ export const manifest: FontFace[] = [
   { family: "Libertinus Serif", weight: 400, style: "italic", file: "LibertinusSerif-400-italic.woff2" },
 
   // iA Writer Quattro — duospaced humanist for distraction-free writing.
+  // Bundled and available; not referenced by a live theme yet (lazy — zero bytes
+  // fetched until a theme paints it).
   { family: "iA Writer Quattro", weight: 400, style: "normal", file: "iAWriterQuattro-400.woff2" },
   { family: "iA Writer Quattro", weight: 700, style: "normal", file: "iAWriterQuattro-700.woff2" },
 ];

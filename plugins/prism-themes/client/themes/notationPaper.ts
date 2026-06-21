@@ -21,7 +21,7 @@ export const notationPaper: ThemeDefinition = {
   },
   typography: {
     ui: "Inter, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
-    content: "Georgia, Times New Roman, serif",
+    content: "Georgia, 'Libertinus Serif', Times New Roman, serif",
     mono: "'Fira Code', 'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
   },
   layout: {

@@ -21,7 +21,7 @@ export const cranberryPaper: ThemeDefinition = {
   },
   typography: {
     ui: "Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    content: "Georgia, 'Times New Roman', serif",
+    content: "Georgia, 'Libertinus Serif', 'Times New Roman', serif",
     mono: "'IBM Plex Mono', SFMono-Regular, Consolas, monospace",
   },
   layout: {
