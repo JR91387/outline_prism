@@ -1,0 +1,6 @@
+{
+  "id": "prism-debug-logger",
+  "name": "Prism Debug Logger",
+  "priority": 100,
+  "description": "Development Mode: opt-in in-app capture of browser console logs with copy + export-to-JSON, for debugging the fork. Off by default; toggled from an Account settings tab."
+}
