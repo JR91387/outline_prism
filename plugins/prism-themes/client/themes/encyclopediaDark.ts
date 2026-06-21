@@ -21,7 +21,7 @@ export const encyclopediaDark: ThemeDefinition = {
   },
   typography: {
     ui: "Arial, Helvetica, sans-serif",
-    content: "Linux Libertine, Georgia, Times New Roman, serif",
+    content: "'Libertinus Serif', 'Linux Libertine', Georgia, 'Times New Roman', serif",
     mono: "Menlo, Consolas, Liberation Mono, monospace",
   },
   layout: {

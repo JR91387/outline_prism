@@ -10,6 +10,7 @@ import useBuildTheme from "~/hooks/useBuildTheme";
 import useStores from "~/hooks/useStores";
 import { Theme as ColorMode } from "~/stores/UiStore";
 import { buildThemeFromDefinition } from "../../plugins/prism-themes/client/adapter";
+import { PrismFonts } from "../../plugins/prism-themes/client/PrismFonts";
 import { useSelectedTheme } from "../../plugins/prism-themes/client/useSelectedTheme";
 
 type Props = {
@@ -75,6 +76,7 @@ const Theme: React.FC = ({ children }: Props) => {
     <DirectionProvider dir={direction}>
       <ThemeProvider theme={theme}>
         <>
+          <PrismFonts />
           <GlobalStyles
             useCursorPointer={
               // Default to showing the cursor pointer if no user is logged in (public share)

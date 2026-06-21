@@ -20,9 +20,9 @@ export const hacker: ThemeDefinition = {
     calloutBackground: "#0d160d",
   },
   typography: {
-    ui: "SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace",
-    content: "SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace",
-    mono: "SFMono-Regular, Menlo, Consolas, Liberation Mono, monospace",
+    ui: "'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace",
+    content: "'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace",
+    mono: "'JetBrains Mono', SFMono-Regular, Menlo, Consolas, monospace",
   },
   layout: {
     density: 0.86,
