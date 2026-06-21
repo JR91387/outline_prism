@@ -6,6 +6,8 @@ import { richExtensions } from "@shared/editor/nodes";
 import { TeamPreference } from "@shared/types";
 import { ProsemirrorHelper } from "@shared/utils/ProsemirrorHelper";
 import Editor from "~/components/Editor";
+import ErrorBoundary from "~/components/ErrorBoundary";
+import { useTeamContext } from "~/components/TeamContext";
 import useStores from "~/hooks/useStores";
 import type Document from "~/models/Document";
 
@@ -27,17 +29,27 @@ type Props = {
  */
 function WorkspaceFooter({ document }: Props) {
   const { auth } = useStores();
-  const team = auth.team;
+  // On a public share auth.team is null; the share supplies a PublicTeam via
+  // TeamContext (same pattern as PageTitle/customTheme). The Team model exposes
+  // getPreference; PublicTeam exposes the footer fields directly.
+  const team = useTeamContext() ?? auth.team;
   if (!team) {
     return null;
   }
 
-  const overrides = team.getPreference(TeamPreference.CollectionFooters);
+  const overrides =
+    "getPreference" in team
+      ? team.getPreference(TeamPreference.CollectionFooters)
+      : team.collectionFooters;
   const override =
     document.collectionId && overrides
       ? overrides[document.collectionId]
       : undefined;
-  const raw = override ?? team.getPreference(TeamPreference.Footer);
+  const footer =
+    "getPreference" in team
+      ? team.getPreference(TeamPreference.Footer)
+      : team.footer;
+  const raw = override ?? footer;
 
   // team.preferences is deeply @observable; under mobx 4 its nested arrays are
   // ObservableArrays that fail Array.isArray inside ProseMirror's
@@ -52,17 +64,20 @@ function WorkspaceFooter({ document }: Props) {
 
   return (
     <Footer contentEditable={false}>
-      {/* Feed the stored ProseMirror data via value + defaultValue, the way
-          Outline's read-only editors do (Document.tsx); this renders rich.
-          (A markdown string fed here renders raw — the client editor hydrates
-          from ProseMirror data, not via markdown parsing.) */}
-      <Editor
-        readOnly
-        embedsDisabled
-        extensions={richExtensions}
-        value={data}
-        defaultValue={data}
-      />
+      {/* ErrorBoundary isolates any footer render failure to the footer itself,
+          so a malformed footer can never crash the whole document (matches
+          Outline's own use of ErrorBoundary around editors). */}
+      <ErrorBoundary showTitle={false}>
+        {/* value + defaultValue feed the (toJS'd, plain) ProseMirror data the
+            way Outline's read-only editors do, so it renders rich. */}
+        <Editor
+          readOnly
+          embedsDisabled
+          extensions={richExtensions}
+          value={data}
+          defaultValue={data}
+        />
+      </ErrorBoundary>
     </Footer>
   );
 }

@@ -392,6 +392,9 @@ export type PublicTeam = {
   name: string;
   customTheme: Partial<CustomTheme>;
   tocPosition: TOCPosition;
+  /** Workspace footer (and per-collection overrides) for shared documents. */
+  footer?: ProsemirrorData;
+  collectionFooters?: Record<string, ProsemirrorData>;
 };
 
 export enum TOCPosition {

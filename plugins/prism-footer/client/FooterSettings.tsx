@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { richExtensions } from "@shared/editor/nodes";
 import { type ProsemirrorData, TeamPreference } from "@shared/types";
 import { ProsemirrorHelper } from "@shared/utils/ProsemirrorHelper";
+import Button from "~/components/Button";
 import Editor from "~/components/Editor";
 import Heading from "~/components/Heading";
 import { InputSelect, type Option } from "~/components/InputSelect";
@@ -78,7 +79,6 @@ function FooterSettings() {
             preferences.collectionFooters = map;
           }
           await team.save({ preferences });
-          toast.success(t("Footer saved"));
         } catch (_err) {
           toast.error(t("Could not save settings"));
         }
@@ -87,6 +87,13 @@ function FooterSettings() {
   );
 
   React.useEffect(() => () => void handleSave.flush(), [handleSave]);
+
+  // Edits auto-save (debounced); the Save button flushes any pending save and
+  // confirms, so there is a clear save affordance on the settings page.
+  const handleSaveClick = React.useCallback(() => {
+    void handleSave.flush();
+    toast.success(t("Footer saved"));
+  }, [handleSave, t]);
 
   const options: Option[] = [
     { type: "item", label: t("Workspace default"), value: WORKSPACE },
@@ -102,7 +109,7 @@ function FooterSettings() {
       <Heading>{t("Workspace Footer")}</Heading>
       <Text as="p" type="secondary">
         {t(
-          "Content shown at the bottom of every document. Set a workspace-wide default, or override it for a specific collection. Leave empty for no footer. Changes save automatically as you edit."
+          "Content shown at the bottom of every document. Set a workspace-wide default, or override it for a specific collection. Leave empty for no footer."
         )}
       </Text>
 
@@ -126,6 +133,12 @@ function FooterSettings() {
           placeholder={`${t("Add a footer")}…`}
         />
       </EditorFrame>
+
+      <SaveRow>
+        <Button onClick={handleSaveClick} neutral>
+          {t("Save")}
+        </Button>
+      </SaveRow>
     </Scene>
   );
 }
@@ -137,10 +150,17 @@ const Field = styled.div`
   margin: 12px 0 20px;
 `;
 
+// Roomy, page-like surface (not a tight box) so the editor's selection toolbar
+// and block menu have space — matches how Outline edits content elsewhere.
 const EditorFrame = styled.div`
-  padding: 12px 16px;
-  border: 1px solid ${(props) => props.theme.inputBorder};
+  margin: 8px 0 16px;
+  padding: 16px 20px;
+  min-height: 240px;
   border-radius: 8px;
-  min-height: 160px;
-  background: ${(props) => props.theme.background};
+  border: 1px solid ${(props) => props.theme.divider};
+`;
+
+const SaveRow = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
