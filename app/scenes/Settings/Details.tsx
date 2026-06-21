@@ -33,6 +33,8 @@ import { ActionRow } from "./components/ActionRow";
 import ImageInput from "./components/ImageInput";
 import SettingRow from "./components/SettingRow";
 import ThemeModeToggle from "../../../plugins/prism-themes/client/ThemeModeToggle";
+import { buildThemeFromDefinition } from "../../../plugins/prism-themes/client/adapter";
+import { useSelectedTheme } from "../../../plugins/prism-themes/client/useSelectedTheme";
 
 function Details() {
   const { dialogs, ui } = useStores();
@@ -40,6 +42,11 @@ function Details() {
   const team = useCurrentTeam();
   const theme = useTheme();
   const can = usePolicy(team);
+  // Fork: when a Prism theme is active, the nested ThemeProvider below must
+  // follow the theme's own light/dark mode — not the user's global Appearance
+  // toggle — so settings controls don't render the wrong polarity (e.g. light
+  // boxes under a dark theme). Falls back to stock behavior in Default mode.
+  const selectedTheme = useSelectedTheme();
 
   const form = useRef<HTMLFormElement>(null);
   const [accent, setAccent] = useState<null | undefined | string>(
@@ -188,13 +195,21 @@ function Details() {
 
   const isValid = form.current?.checkValidity();
 
-  const newTheme = React.useMemo(
-    () =>
-      ui.resolvedTheme === "light"
-        ? buildLightTheme(customTheme)
-        : buildDarkTheme(customTheme),
-    [customTheme, ui.resolvedTheme]
-  );
+  const isLight = selectedTheme
+    ? selectedTheme.mode === "light"
+    : ui.resolvedTheme === "light";
+  const newTheme = React.useMemo(() => {
+    const stock = isLight
+      ? buildLightTheme(customTheme)
+      : buildDarkTheme(customTheme);
+    // In Prism (advanced) mode, overlay the full palette so settings surfaces —
+    // the sticky header/footer scrim (transparentize of theme.background) and
+    // the input boxes — match the theme's own canvas instead of showing stock
+    // white/black bars over the tinted page. Default mode keeps stock.
+    return selectedTheme
+      ? buildThemeFromDefinition(selectedTheme, stock)
+      : stock;
+  }, [customTheme, isLight, selectedTheme]);
 
   return (
     <ThemeProvider theme={newTheme}>
