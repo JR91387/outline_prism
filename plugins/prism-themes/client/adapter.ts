@@ -23,10 +23,10 @@ const contrastRatio = (a: string, b: string) => {
  * Used for the derived `link` and `sidebarText` tokens (which authors never
  * set directly); returns `fg` unchanged when it already passes.
  */
-const makeAA = (fg: string, bgs: string[]) => {
+const makeAA = (fg: string, bgs: string[], target = 4.5) => {
   const worst = (color: string) =>
     bgs.reduce((m, b) => Math.min(m, contrastRatio(color, b)), Infinity);
-  if (worst(fg) >= 4.5) {
+  if (worst(fg) >= target) {
     return fg;
   }
   const worstBg = bgs.reduce((w, b) =>
@@ -40,7 +40,49 @@ const makeAA = (fg: string, bgs: string[]) => {
       break;
     }
     cur = next;
-    if (worst(cur) >= 4.5) {
+    if (worst(cur) >= target) {
+      break;
+    }
+  }
+  return cur;
+};
+
+/** Comfortable sidebar-text contrast — above the 4.5 AA floor so bold/saturated
+ * sidebars (e.g. the Collection rust/green) stay easy to read. Capped naturally
+ * by makeAA (it stops at white/black when a target is unreachable). */
+const SIDEBAR_TEXT_RATIO = 5.5;
+
+/**
+ * Readable color for sidebar identity text — the workspace name (top) and user
+ * name (bottom) which upstream renders by inheriting `theme.text`, unreadable on
+ * a bold dark sidebar. Returns `text` UNCHANGED when it already passes on the
+ * sidebar (so subtle-sidebar themes are untouched), else shifts it to legible.
+ */
+export const sidebarHeadingColor = (def: ThemeDefinition) =>
+  makeAA(def.colors.text, [def.colors.sidebar], SIDEBAR_TEXT_RATIO);
+
+/**
+ * Returns `bg` shifted in lightness (hue preserved) until `fg` is legible on it
+ * at WCAG AA (4.5:1), choosing direction from `fg`'s luminance (lighten under
+ * dark text, darken under light text). Used for the active sidebar item, whose
+ * text is `theme.text` (set by upstream `SidebarLink`): on a light theme with a
+ * bold DARK sidebar the raised active background would otherwise be dark-on-dark.
+ * Returns `bg` unchanged when `fg` already passes, so normal themes are untouched.
+ */
+const makeReadableBg = (fg: string, bg: string) => {
+  if (contrastRatio(fg, bg) >= 4.5) {
+    return bg;
+  }
+  const goLighter = getLuminance(fg) < 0.4;
+  let cur = bg;
+  for (let i = 0; i < 50; i++) {
+    const next = goLighter ? lighten(0.03, cur) : darken(0.03, cur);
+    if (next === cur) {
+      break;
+    }
+    cur = next;
+    // Overshoot the 4.5 floor a little so the live render clears AA with margin.
+    if (contrastRatio(fg, cur) >= 4.8) {
       break;
     }
   }
@@ -122,9 +164,12 @@ export function buildThemeFromDefinition(
       sidebarBackground: c.sidebar,
       // Derive readable sidebar text against the sidebar's own background, so a
       // light theme with a dark sidebar (or vice-versa) stays legible.
-      sidebarText: makeAA(c.textMuted, [c.sidebar]),
+      sidebarText: makeAA(c.textMuted, [c.sidebar], SIDEBAR_TEXT_RATIO),
       sidebarHoverBackground: raise(0.05, c.sidebar),
-      sidebarActiveBackground: raise(0.09, c.sidebar),
+      // Keep the active item's text (upstream SidebarLink uses theme.text)
+      // legible — on a light theme with a bold dark sidebar the raised active
+      // background must lighten so dark text reads. Normal themes are unchanged.
+      sidebarActiveBackground: makeReadableBg(c.text, raise(0.09, c.sidebar)),
       sidebarControlHoverBackground: transparentize(0.8, c.text),
       sidebarDraftBorder: raise(0.2, c.sidebar),
 

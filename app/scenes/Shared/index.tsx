@@ -33,6 +33,7 @@ import ErrorOffline from "../Errors/ErrorOffline";
 import { Collection as CollectionScene } from "./Collection";
 import { Document as DocumentScene } from "./Document";
 import { PrismContentFont } from "../../../plugins/prism-themes/client/PrismContentFont";
+import { PrismShareSurface } from "../../../plugins/prism-themes/client/PrismShareSurface";
 import { usePublicSelectedTheme } from "../../../plugins/prism-themes/client/usePublicSelectedTheme";
 import DelayedMount from "~/components/DelayedMount";
 import lazyWithRetry from "~/utils/lazyWithRetry";
@@ -138,7 +139,7 @@ function SharedScene() {
   const team = share?.team;
   // Fork: apply the workspace's Prism theme (palette + fonts) to logged-out
   // share viewers when exposed; falls back to the stock useBuildTheme result.
-  const { theme, contentFont } = usePublicSelectedTheme(team);
+  const { theme, themed, contentFont } = usePublicSelectedTheme(team);
 
   const pageTitle =
     model instanceof Collection
@@ -265,6 +266,7 @@ function SharedScene() {
       </Helmet>
       <TeamContext.Provider value={team}>
         <ThemeProvider theme={theme}>
+          {themed && <PrismShareSurface />}
           <PrismContentFont font={contentFont} />
           <DocumentContextProvider>
             <Layout

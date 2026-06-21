@@ -9,9 +9,13 @@ import { isRTLLanguage } from "@shared/utils/rtl";
 import useBuildTheme from "~/hooks/useBuildTheme";
 import useStores from "~/hooks/useStores";
 import { Theme as ColorMode } from "~/stores/UiStore";
-import { buildThemeFromDefinition } from "../../plugins/prism-themes/client/adapter";
+import {
+  buildThemeFromDefinition,
+  sidebarHeadingColor,
+} from "../../plugins/prism-themes/client/adapter";
 import { PrismContentFont } from "../../plugins/prism-themes/client/PrismContentFont";
 import { PrismFonts } from "../../plugins/prism-themes/client/PrismFonts";
+import { PrismSidebarHeadings } from "../../plugins/prism-themes/client/PrismSidebarHeadings";
 import { useSelectedTheme } from "../../plugins/prism-themes/client/useSelectedTheme";
 
 type Props = {
@@ -79,6 +83,9 @@ const Theme: React.FC = ({ children }: Props) => {
         <>
           <PrismFonts />
           <PrismContentFont font={selectedTheme?.typography.content} />
+          <PrismSidebarHeadings
+            color={selectedTheme ? sidebarHeadingColor(selectedTheme) : undefined}
+          />
           <GlobalStyles
             useCursorPointer={
               // Default to showing the cursor pointer if no user is logged in (public share)

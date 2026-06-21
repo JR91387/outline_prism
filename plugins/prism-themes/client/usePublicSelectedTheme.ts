@@ -18,11 +18,13 @@ import { getTheme } from "./registry";
  * preserving the share's default look.
  *
  * @param team the share's public team payload, or undefined while loading.
- * @returns the composed theme and the optional content (body) font stack to
- *   publish via `--prism-content-font`.
+ * @returns the composed theme, whether a Prism theme is actually active
+ *   (`themed`), and the optional content (body) font stack to publish via
+ *   `--prism-content-font`.
  */
 export function usePublicSelectedTheme(team: PublicTeam | undefined): {
   theme: DefaultTheme;
+  themed: boolean;
   contentFont?: string;
 } {
   const def = getTheme(team?.prismTheme);
@@ -34,5 +36,5 @@ export function usePublicSelectedTheme(team: PublicTeam | undefined): {
     () => (def ? buildThemeFromDefinition(def, base) : base),
     [def, base]
   );
-  return { theme, contentFont: def?.typography.content };
+  return { theme, themed: !!def, contentFont: def?.typography.content };
 }
